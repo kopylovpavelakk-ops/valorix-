@@ -1,0 +1,137 @@
+-- Valorix Scripts | Violence District
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "Valorix Scripts | Violence District",
+    LoadingTitle = "Violence District",
+    LoadingSubtitle = "by Valorix",
+    ConfigurationSaving = {
+        Enabled = false,
+    },
+    KeySystem = false,
+})
+
+local MainTab = Window:CreateTab("Главная")
+local ESPTab = Window:CreateTab("ESP")
+local InfoTab = Window:CreateTab("Информация")
+
+-- Переменные для скорости
+local WalkSpeedEnabled = false
+local CurrentWalkSpeed = 16
+
+-- Быстрый взлом
+MainTab:CreateSection("Быстрый взлом")
+MainTab:CreateToggle({
+    Name = "Включить Speed Hack",
+    CurrentValue = false,
+    Callback = function(Value)
+        WalkSpeedEnabled = Value
+        task.spawn(function()
+            while WalkSpeedEnabled do
+                task.wait(0.1)
+                local char = game.Players.LocalPlayer.Character
+                if char and char:FindFirstChild("Humanoid") then
+                    char.Humanoid.WalkSpeed = CurrentWalkSpeed
+                end
+            end
+            -- Возвращаем стандартную скорость при выключении
+            local char = game.Players.LocalPlayer.Character
+            if char and char:FindFirstChild("Humanoid") then
+                char.Humanoid.WalkSpeed = 16
+            end
+        end)
+    end,
+})
+
+MainTab:CreateSlider({
+    Name = "Значение скорости",
+    Range = {16, 100},
+    Increment = 1,
+    CurrentValue = 16,
+    Callback = function(Value)
+        CurrentWalkSpeed = Value
+    end,
+})
+
+-- Освещение
+MainTab:CreateSection("Освещение (FullBright)")
+MainTab:CreateToggle({
+    Name = "Включить FullBright",
+    CurrentValue = false,
+    Callback = function(Value)
+        if Value then
+            game.Lighting.Brightness = 2
+            game.Lighting.ClockTime = 14
+            game.Lighting.FogEnd = 100000
+            game.Lighting.GlobalShadows = false
+        else
+            game.Lighting.Brightness = 1
+            game.Lighting.GlobalShadows = true
+        end
+    end,
+})
+
+-- ESP (Просто подсветка игроков без ников и ролей)
+ESPTab:CreateSection("ESP Настройки")
+local ESPEnabled = false
+
+ESPTab:CreateToggle({
+    Name = "Включить Wallhack / Подсветку",
+    CurrentValue = false,
+    Callback = function(Value)
+        ESPEnabled = Value
+        task.spawn(function()
+            while ESPEnabled do
+                task.wait(0.5)
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    if player ~= game.Players.LocalPlayer and player.Character then
+                        local char = player.Character
+                        
+                        -- Подсветка персонажа (Highlight) ярко-синим цветом в стиле Valorix
+                        local highlight = char:FindFirstChild("Valorix_Highlight")
+                        if not highlight then
+                            highlight = Instance.new("Highlight")
+                            highlight.Name = "Valorix_Highlight"
+                            highlight.Adornee = char
+                            highlight.Parent = char
+                        end
+                        highlight.FillColor = Color3.fromRGB(0, 150, 255)
+                        highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+                        highlight.FillTransparency = 0.4
+                    end
+                end
+            end
+            
+            -- Удаление подсветки при выключении
+            for _, player in ipairs(game.Players:GetPlayers()) do
+                if player.Character then
+                    local hl = player.Character:FindFirstChild("Valorix_Highlight")
+                    if hl then hl:Destroy() end
+                end
+            end
+        end)
+    end,
+})
+
+-- Вкладка информации
+InfoTab:CreateSection("Создатель и Сообщество")
+InfoTab:CreateParagraph({Title = "Владелец скрипта", Content = "Разработчик: Valorix"})
+InfoTab:CreateParagraph({Title = "Наш Telegram канал", Content = "Официальный ТГК: @valorixscripts"})
+
+InfoTab:CreateButton({
+    Name = "Скопировать ссылку на ТГК",
+    Callback = function()
+        if setclipboard then
+            setclipboard("https://t.me/valorixscripts")
+            Rayfield:Notify({Title = "Успех", Content = "Ссылка на @valorixscripts скопирована!", Duration = 3})
+        else
+            Rayfield:Notify({Title = "Информация", Content = "Твой ТГК: t.me/valorixscripts", Duration = 5})
+        end
+    end,
+})
+
+Rayfield:Notify({
+    Title = "Valorix Scripts",
+    Content = "Скрипт успешно запущен!",
+    Duration = 5,
+})
