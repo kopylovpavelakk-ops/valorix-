@@ -15,7 +15,6 @@ local Window = Rayfield:CreateWindow({
     KeySystem = false,
 })
 
--- Уведомление при запуске для привлечения внимания к ТГК
 Rayfield:Notify({
     Title = "Добро пожаловать!",
     Content = "Скрипт от Великого Валорикса. Подпишись на @valorixscripts!",
@@ -23,12 +22,10 @@ Rayfield:Notify({
     Image = 4483362458
 })
 
--- Вкладки
 local MainTab = Window:CreateTab("Главная", 4483362458)
 local VisualTab = Window:CreateTab("Визуалы (ESP)", 4483345998)
 local TgTab = Window:CreateTab("Telegram & Комьюнити", 4483362458)
 
--- Переменные
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
@@ -37,7 +34,6 @@ local speedEnabled = false
 local customSpeed = 16
 local espEnabled = false
 
--- ================= Главная =================
 MainTab:CreateSection("Управление персонажем [Valorix Hub]")
 
 MainTab:CreateToggle({
@@ -67,7 +63,6 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- ================= Визуалы =================
 VisualTab:CreateSection("Подсветка игроков")
 
 VisualTab:CreateToggle({
@@ -104,7 +99,6 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- ================= Telegram & Комьюнити =================
 TgTab:CreateSection("Официальный канал разработчика")
 
 TgTab:CreateParagraph({
