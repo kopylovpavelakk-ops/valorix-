@@ -127,4 +127,3 @@ TgTab:CreateButton({
 })
 
 Rayfield:LoadConfiguration()
-
